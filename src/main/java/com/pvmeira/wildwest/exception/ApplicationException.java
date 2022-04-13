@@ -1,5 +1,8 @@
 package com.pvmeira.wildwest.exception;
 
+import lombok.Getter;
+
+@Getter
 public class ApplicationException extends RuntimeException {
     private String message;
 

@@ -2,6 +2,7 @@ package com.pvmeira.wildwest.service;
 
 import com.pvmeira.wildwest.dto.RawFileRead;
 import com.pvmeira.wildwest.exception.ApplicationException;
+import com.pvmeira.wildwest.exception.PackageAlreadyExistException;
 import com.pvmeira.wildwest.exception.TransactionException;
 import com.pvmeira.wildwest.model.Transaction;
 import com.pvmeira.wildwest.model.TransactionalPackage;
@@ -36,7 +37,7 @@ public class RawFileService {
         this.transactionalPackageService = transactionalPackageService;
     }
 
-    public RawFileRead read(MultipartFile file)  {
+    public RawFileRead read(MultipartFile file)  throws  ApplicationException {
         List<Transaction> records = new ArrayList<>();
         Integer totalTransactionsWithError = 0;
         Integer totalTransactions = 0;
@@ -53,7 +54,7 @@ public class RawFileService {
                     if (transactionalDate == null) {
                         transactionalDate = transaction.getDateOfTransaction().toLocalDate();
                         if (this.transactionalPackageService.alreadyExist(transactionalDate))
-                            throw new ApplicationException("A file for this date was already process.");
+                            throw new PackageAlreadyExistException("A file for this date was already process.");
                     }
                     if (transactionalDate.isEqual(transaction.getDateOfTransaction().toLocalDate())) {
                         records.add(transaction);
@@ -64,6 +65,9 @@ public class RawFileService {
 
                 } catch (TransactionException e) {
                     totalTransactionsWithError++;
+                }
+                catch (PackageAlreadyExistException e1) {
+                    throw new ApplicationException(e1.getMessage());
                 }
             }
         } catch (IOException e) {

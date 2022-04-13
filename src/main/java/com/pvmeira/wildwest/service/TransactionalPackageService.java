@@ -9,6 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class TransactionalPackageService {
@@ -35,6 +38,10 @@ public class TransactionalPackageService {
     public TransactionalPackage edit(TransactionalPackage transactionalPackage) {
         this.repository.findById(transactionalPackage.getPackageDate()).orElseThrow( () -> new RuntimeException("No transaction package was found for this date, DATE = " + transactionalPackage.getPackageDate().toString()));
         return this.save(transactionalPackage);
+    }
+
+    public List<TransactionalPackage> findAll() {
+        return StreamSupport.stream(this.repository.findAll().spliterator(), false).collect(Collectors.toList());
     }
 
     public boolean alreadyExist(LocalDate date) {
