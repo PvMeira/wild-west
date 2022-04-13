@@ -54,7 +54,7 @@ public class RawFileService {
                     if (transactionalDate == null) {
                         transactionalDate = transaction.getDateOfTransaction().toLocalDate();
                         if (this.transactionalPackageService.alreadyExist(transactionalDate))
-                            throw new PackageAlreadyExistException("A file for this date was already process.");
+                            throw new PackageAlreadyExistException("Já existe um processamento para o Dia : " + transactionalDate.toString());
                     }
                     if (transactionalDate.isEqual(transaction.getDateOfTransaction().toLocalDate())) {
                         records.add(transaction);
@@ -71,7 +71,7 @@ public class RawFileService {
                 }
             }
         } catch (IOException e) {
-            throw new ApplicationException("A error has occur while reading the Data from the file with name " + file.getOriginalFilename());
+            throw new ApplicationException("Ocorreu um erro inesperado ao ler o conteúdo do arquivo de nome :  " + file.getOriginalFilename());
         }
         final TransactionalPackage transactionalPackage = this.transactionalPackageService.save(TransactionalPackage.builder()
                 .withPackageDate(transactionalDate)
@@ -96,7 +96,7 @@ public class RawFileService {
     private Transaction getTransactionFromLine(String line) throws TransactionException {
         String[] data = line.split(SPLIT_DELIMITER);
         if (data.length != 8 )
-            throw new TransactionException("Transaction line does not contains all the necessary data.");
+            throw new TransactionException("A linha da transação não contém todos os dados necessários para o processamento.");
         Transaction.TransactionBuilder builder = this.buildOriginBankInformation(data);
         builder = buildDestinyBankInformation(data, builder);
         builder = buildOtherInfos(data, builder);
