@@ -30,5 +30,9 @@ public class TransactionalPackage {
     @Column(name = "process_end_date")
     private LocalDateTime processEndDate;
 
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "username")
+    private Users user;
+
 
 }

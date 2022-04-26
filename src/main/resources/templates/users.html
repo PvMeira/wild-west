@@ -29,7 +29,6 @@
                 <table class="table">
                     <thead>
                     <tr>
-                        <th  scope="col">ID</th>
                         <th  scope="col">NOME</th>
                         <th  scope="col">EMAIL</th>
                         <th  scope="col">OPÇÕES</th>
@@ -37,12 +36,11 @@
                     </thead>
                     <tbody>
                     <tr th:each="user : ${users}">
-                        <td th:text="${user.id}"></td>
                         <td th:text="${user.name}"></td>
                         <td th:text="${user.email}"></td>
                         <td>
-                            <a th:href="@{/users/edit/{id}(id=${user.id})}" class="btn btn-info">Editar</a>
-                           <a th:href="@{/users/delete/{id}(id=${user.id})}"  class="btn btn-danger">Excluir</a>
+                           <a th:href="@{/users/edit/{id}(id=${user.email})}" class="btn btn-info">Editar</a>
+                           <a th:href="@{/users/delete/{id}(id=${user.email})}" class="btn btn-danger">Excluir</a>
                         </td>
                     </tr>
                     </tbody>

@@ -6,6 +6,7 @@ import com.pvmeira.wildwest.exception.PackageAlreadyExistException;
 import com.pvmeira.wildwest.exception.TransactionException;
 import com.pvmeira.wildwest.model.Transaction;
 import com.pvmeira.wildwest.model.TransactionalPackage;
+import com.pvmeira.wildwest.model.Users;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,7 +38,7 @@ public class RawFileService {
         this.transactionalPackageService = transactionalPackageService;
     }
 
-    public RawFileRead read(MultipartFile file)  throws  ApplicationException {
+    public RawFileRead read(MultipartFile file, Users user)  throws  ApplicationException {
         List<Transaction> records = new ArrayList<>();
         Integer totalTransactionsWithError = 0;
         Integer totalTransactions = 0;
@@ -76,6 +77,7 @@ public class RawFileService {
         final TransactionalPackage transactionalPackage = this.transactionalPackageService.save(TransactionalPackage.builder()
                 .withPackageDate(transactionalDate)
                 .withProcessStartDate(start)
+                .withUser(user)
                 .withTotalTransactions(totalTransactions)
                 .withTotalErrorTransactions(totalTransactionsWithError)
 

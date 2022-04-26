@@ -31,18 +31,18 @@
             <tr>
                 <th  scope="col">Data Transações</th>
                 <th  scope="col">Total de Transações Processadas</th>
-                <th  scope="col">Erros</th>
                 <th  scope="col">Data de Importação Início</th>
-                <th  scope="col">Data de Importação Fim</th>
+                <th  scope="col">OPÇÕES</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="t : ${transactions}">
                 <td th:text="${#temporals.format(t.packageDate, 'dd/MM/yyyy')}"></td>
                 <td th:text="${t.totalTransactions}"></td>
-                <td th:text="${t.totalErrorTransactions}"></td>
                 <td th:text="${#temporals.format(t.processStartDate, 'dd/MM/yyyy HH:mm:ss')}"></td>
-                <td th:text="${#temporals.format(t.processEndDate, 'dd/MM/yyyy HH:mm:ss')}"></td>
+                <td>
+                    <a th:href="@{/transactions/detail/{packageDate}(packageDate=${t.packageDate})}" class="btn btn-info">Detalhar</a>
+                </td>
             </tr>
             </tbody>
         </table>

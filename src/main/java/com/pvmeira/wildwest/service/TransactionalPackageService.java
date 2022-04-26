@@ -23,6 +23,10 @@ public class TransactionalPackageService {
         this.repository = repository;
     }
 
+
+    public TransactionalPackage find(LocalDate packageDate) {
+        return this.repository.findById(packageDate).get();
+    }
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public TransactionalPackage save(TransactionalPackage transactionalPackage) {
         return this.repository.save(transactionalPackage);

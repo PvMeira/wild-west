@@ -1,6 +1,7 @@
 package com.pvmeira.wildwest.service;
 
 import com.pvmeira.wildwest.model.Transaction;
+import com.pvmeira.wildwest.model.TransactionalPackage;
 import com.pvmeira.wildwest.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,9 @@ public class TransactionService {
         this.repository = repository;
     }
 
+    public List<Transaction> findAllTransactionsFromPackge(TransactionalPackage tp) {
+        return this.repository.findAllByTransactionalPackage(tp);
+    }
 
     public Transaction save (Transaction t) {
         return this.repository.save(t);

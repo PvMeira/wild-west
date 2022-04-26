@@ -9,22 +9,21 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(setterPrefix = "with")
-@Entity(name = "USERS")
+@Entity(name = "users")
 public class Users {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    @Column(name = "ID", nullable = false)
-    private Long id;
-
-    @Column(name = "EMAIL", nullable = false)
+    @Column(name = "username", nullable = false)
     private String email;
 
-    @Column(name = "PASS", nullable = false)
+    @Column(name = "password", nullable = false)
     private String password;
 
     @Column(name = "NAME", nullable = false)
     private String name;
+
+    @Column(name = "enabled")
+    private boolean enabled;
 
     @Column(name = "STATUS", nullable = false, length = 1)
     private String status;

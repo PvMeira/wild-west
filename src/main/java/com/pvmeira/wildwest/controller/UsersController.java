@@ -8,6 +8,7 @@ import com.pvmeira.wildwest.exception.ApplicationException;
 import com.pvmeira.wildwest.model.Users;
 import com.pvmeira.wildwest.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -42,24 +43,29 @@ public class UsersController {
         return Pages.USERS_ADD;
     }
 
-    @GetMapping("/edit/{id}")
-    public String showEditPage(@PathVariable("id") long id, Model model) {
-        Users foundUser = this.service.find(id);
+    @GetMapping("/edit/{username}")
+    public String showEditPage(@PathVariable("username") String username, Model model) {
+        Users foundUser = this.service.find(username);
         model.addAttribute("user", foundUser);
         return Pages.USERS_EDIT;
     }
 
-    @PostMapping("/edit/{id}")
-    public String updateUser(@PathVariable("id") long id,  UserRequest user,
+    @PostMapping("/edit/{username}")
+    public String updateUser(@PathVariable("username") String username,  UserRequest user,
                              BindingResult result, Model model) {
 
-        Users updateUser = this.service.edit(id, user);
+        Users updateUser = this.service.edit(username, user);
         return "redirect:" + URI.USERS;
     }
 
-    @GetMapping("/delete/{id}")
-    public String deleteUser(@PathVariable("id") long id, Model model) {
-        this.service.removeUser(id);
+    @GetMapping("/delete/{username}")
+    public String deleteUser(@PathVariable("username") String username, Model model, Authentication authentication,RedirectAttributes attributes) {
+        if (username.equalsIgnoreCase(authentication.getName())){
+            attributes.addFlashAttribute("messageError", "Usuário não autorizado.");
+            return "redirect:" + URI.USERS;
+        }
+
+        this.service.removeUser(username);
         return "redirect:"+ URI.USERS;
     }
 

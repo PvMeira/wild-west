@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -29,46 +30,45 @@ public class UsersService {
 
     public Users create(UserRequest userRequest) {
 
-        Users checkUser = this.repository.findFirstByEmailEqualsIgnoreCase(userRequest.getEmail());
-        String randomPassword = this.passwordService.getRandomNumber();
-        if (null != checkUser)
+        if (this.repository.findById(userRequest.getEmail()).isPresent())
             throw new ApplicationException("Já existe um usuário com o email : " + userRequest.getEmail());
+        String randomPassword = this.passwordService.getRandomNumber();
 
+        System.out.println("The password generated is : " + randomPassword);
         Users user = Users.builder()
                 .withEmail(userRequest.getEmail())
                 .withName(userRequest.getName())
                 .withPassword(this.passwordService.createFirstAcessPassword(randomPassword))
+                .withEnabled(true)
                 .withStatus("A")
                 .build();
         Users cratedUser = this.repository.save(user);
+        this.repository.createDefaultUserAuthorities(user.getEmail());
         this.mailService.send(user.getEmail(), randomPassword);
 
         return cratedUser;
     }
 
-    public Users find(Long id) {
-        return this.repository.findById(id).orElseThrow( () -> new ApplicationException("Usuário não encontrado"));
-    }
 
     public Users find(String email) {
-        Users checkUser = this.repository.findFirstByEmailEqualsIgnoreCase(email);
-        if (null == checkUser)
-            throw new ApplicationException("Usuário não encontrado");
-        return checkUser;
+        Optional<Users> usersOptional = this.repository.findById(email);
+        if (usersOptional.isEmpty())
+            throw new ApplicationException("Não existe um usuário com o email : " + email);
+        return usersOptional.get();
 
     }
 
-    public void removeUser(Long id) {
-        Users users = this.find(id);
+    public void removeUser(String username) {
+        Users users = this.find(username);
         this.repository.save(users.withStatus("I"));
     }
 
-    public Users edit(Long id, Users user) {
-        this.find(id);
+    public Users edit(String username, Users user) {
+        this.find(username);
         return this.repository.save(user);
     }
-    public Users edit(Long id, UserRequest user) {
-        Users a = this.find(id);
+    public Users edit(String username, UserRequest user) {
+        Users a = this.find(username);
 
         return this.repository.save(a.withEmail(user.getEmail()).withName(user.getName()));
     }
@@ -80,7 +80,6 @@ public class UsersService {
                 .withEmail(a.getEmail())
                 .withName(a.getName())
                 .withStatus(a.getStatus())
-                .withId(a.getId())
                 .build()).collect(Collectors.toList());
     }
 }

@@ -23,7 +23,7 @@
 <section class="my-5">
     <div class="container">
 <form action="#"
-      th:action="@{/users/edit/{id}(id=${user.id})}"
+      th:action="@{/users/edit/{username}(username=${user.email})}"
       th:object="${user}"
       method="post">
     <label for="name">Name</label>
