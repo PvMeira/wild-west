@@ -8,6 +8,7 @@ public interface URI {
 
     String LOGOUT = "/logout";
     String TRNSACTIONS = "/transactions";
+    String TRNSACTIONS_ANALYSIS = "/transactions/analysis";
     String USERS = "/users";
     String USERS_ADD = "/users/add";
     String USERS_EDIT = "/users/edit";

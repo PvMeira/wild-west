@@ -4,6 +4,7 @@ public interface Pages {
 
     String INDEX = "index";
     String TRANSACTIONS = "transactions";
+    String TRANSACTIONS_ANALYSIS = "transactions-analysis";
     String TRANSACTION_DETAIL = "transaction-detail";
 
     String USERS = "users";

@@ -12,7 +12,6 @@ public interface UsersRepository  extends CrudRepository<Users, String>  {
 
     @Transactional
     @Modifying(clearAutomatically = true)
-
     @Query(value = "INSERT INTO authorities (USERNAME, AUTHORITY) VALUES (:email, 'ROLE_USER')", nativeQuery = true)
     void createDefaultUserAuthorities(String email);
 }

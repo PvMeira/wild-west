@@ -41,4 +41,19 @@ public class Transaction {
     private TransactionalPackage transactionalPackage;
 
 
+    public String getAccountOrigin() {
+        return new StringBuilder(originBankName).append("<split>").append(originBankAgency).append("<split>").append(originAccount).append("<split>").append("Saída").toString();
+    }
+    public String getAccountDestiny() {
+        return new StringBuilder(destinyBankName).append("<split>").append(destinyBankAgency).append("<split>").append(destinyAccount).append("<split>").append("Entrada").toString();
+    }
+
+    public String getAgencyDestiny() {
+        return new StringBuilder(destinyBankName).append("<split>").append(destinyBankAgency).append("<split>").append("Entrada").toString();
+    }
+
+    public String getAgencyOrigin() {
+        return new StringBuilder(destinyBankName).append("<split>").append(destinyBankAgency).append("<split>").append("Saída").toString();
+    }
+
 }
